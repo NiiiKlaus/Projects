@@ -1,0 +1,35 @@
+TensorFlow 2.0 Upgrade Script
+-----------------------------
+Converted 1 files
+Detected 0 issues that require attention
+--------------------------------------------------------------------------------
+================================================================================
+Detailed log follows:
+
+================================================================================
+--------------------------------------------------------------------------------
+Processing file 'training.py'
+ outputting to 'training_v2.py'
+--------------------------------------------------------------------------------
+
+39:11: INFO: Renamed 'tf.InteractiveSession' to 'tf.compat.v1.InteractiveSession'
+43:18: INFO: Renamed 'tf.truncated_normal' to 'tf.random.truncated_normal'
+53:15: INFO: Added keywords to args of function 'tf.nn.conv2d'
+53:15: INFO: Renamed keyword argument for tf.nn.conv2d from filter to filters
+57:15: INFO: Added keywords to args of function 'tf.nn.max_pool'
+57:15: INFO: Renamed keyword argument for tf.nn.max_pool from value to input
+57:15: INFO: Renamed 'tf.nn.max_pool' to 'tf.nn.max_pool2d'
+61:8: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+62:9: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+89:16: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+90:17: INFO: Changing keep_prob arg of tf.nn.dropout to rate, and recomputing value.
+
+97:21: INFO: Added keywords to args of function 'tf.reduce_sum'
+97:40: INFO: Renamed 'tf.log' to 'tf.math.log'
+99:17: INFO: Renamed 'tf.train.AdamOptimizer' to 'tf.compat.v1.train.AdamOptimizer'
+101:34: INFO: Added keywords to args of function 'tf.argmax'
+101:56: INFO: Added keywords to args of function 'tf.argmax'
+102:15: INFO: Added keywords to args of function 'tf.reduce_mean'
+103:13: INFO: Renamed 'tf.global_variables_initializer' to 'tf.compat.v1.global_variables_initializer'
+--------------------------------------------------------------------------------
+

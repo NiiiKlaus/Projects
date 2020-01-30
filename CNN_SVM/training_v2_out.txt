@@ -1,0 +1,59 @@
+2020-01-30 22:08:15.276917: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-01-30 22:08:15.280751: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2500615000 Hz
+2020-01-30 22:08:15.281009: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x562b9bb67d00 executing computations on platform Host. Devices:
+2020-01-30 22:08:15.281049: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): Host, Default Version
+WARNING:tensorflow:From /usr/local/anaconda3/lib/python3.7/site-packages/tensorflow_core/python/ops/resource_variable_ops.py:1630: calling BaseResourceVariable.__init__ (from tensorflow.python.ops.resource_variable_ops) with constraint is deprecated and will be removed in a future version.
+Instructions for updating:
+If using Keras pass *_constraint arguments to layers.
+testing NO.0 dataset.......
+test accuracy 0.958595
+svm testing accuracy:
+0.9661229611041405
+testing NO.1 dataset.......
+test accuracy 0.925972
+svm testing accuracy:
+0.9385194479297365
+testing NO.2 dataset.......
+test accuracy 0.949812
+svm testing accuracy:
+0.9548306148055207
+testing NO.3 dataset.......
+test accuracy 0.943538
+svm testing accuracy:
+0.9548306148055207
+testing NO.4 dataset.......
+test accuracy 0.949812
+svm testing accuracy:
+0.958594730238394
+testing NO.5 dataset.......
+test accuracy 0.929736
+svm testing accuracy:
+0.944792973651192
+testing NO.6 dataset.......
+test accuracy 0.948557
+svm testing accuracy:
+0.9510664993726474
+testing NO.7 dataset.......
+test accuracy 0.948557
+svm testing accuracy:
+0.9523212045169385
+testing NO.8 dataset.......
+test accuracy 0.932246
+svm testing accuracy:
+0.9485570890840652
+testing NO.9 dataset.......
+test accuracy 0.943538
+svm testing accuracy:
+0.9535759096612296
+
+
+
+My Environments:
+1. Python
+Python 3.7.4 (default, Aug 13 2019, 20:35:49) 
+[GCC 7.3.0] :: Anaconda, Inc. on linux
+Type "help", "copyright", "credits" or "license" for more information.
+
+2. Tensorflow
+version '2.0.0'
+not using GPU

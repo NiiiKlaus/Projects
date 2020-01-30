@@ -4,6 +4,7 @@ import numpy as np
 import tensorflow as tf
 from sklearn import svm   # Support Vector Machines (支持向量机)
 
+tf.compat.v1.disable_eager_execution()
 
 for file_num in range(10):
     # 在十个随机生成的不相干数据集上进行测试，将结果综合
@@ -16,8 +17,10 @@ for file_num in range(10):
     y_train_temp = []
     y_train_transform = []
     for i in range(len(lines1)):
-        X_train.append(list(map(int, map(float, lines1[i].split(' ')[:256]))))   # 读取训练集的横坐标（index为0到255）
-        y_train.append(list(map(int, lines1[i].split(' ')[256:266])))            # 读取训练集的纵坐标（index为256到265）
+        # 读取训练集的横坐标（index为0到255）
+        X_train.append(list(map(int, map(float, lines1[i].split(' ')[:256]))))
+        # 读取训练集的纵坐标（index为256到265）
+        y_train.append(list(map(int, lines1[i].split(' ')[256:266])))
         y_train_transform.append(
             np.argmax(list(map(int, lines1[i].split(' ')[256:266]))))   # 返回index从256到266的数据的最大值
     f1.close()
@@ -29,18 +32,20 @@ for file_num in range(10):
     y_test = []
     y_test_transform = []
     for i in range(len(lines2)):
-        X_test.append(list(map(int, map(float, lines2[i].split(' ')[:256]))))   # 读取测试集数据的横坐标（index为0到255）
-        y_test.append(list(map(int, lines2[i].split(' ')[256:266])))            # 读取测试集数据的纵坐标（index为256到265）
+        # 读取测试集数据的横坐标（index为0到255）
+        X_test.append(list(map(int, map(float, lines2[i].split(' ')[:256]))))
+        # 读取测试集数据的纵坐标（index为256到265）
+        y_test.append(list(map(int, lines2[i].split(' ')[256:266])))
         y_test_transform.append(
             np.argmax(list(map(int, lines2[i].split(' ')[256:266]))))
     f2.close()
 
     # 建立一个tensorflow的会话
-    sess = tf.InteractiveSession()
+    sess = tf.compat.v1.InteractiveSession()
 
     # 初始化权值向量
     def weight_variable(shape):
-        initial = tf.truncated_normal(shape, stddev=0.1)
+        initial = tf.random.truncated_normal(shape, stddev=0.1)
         return tf.Variable(initial)
 
     # 初始化偏置向量
@@ -50,16 +55,17 @@ for file_num in range(10):
 
     # 二维卷积运算，步长为1，输出大小不变
     def conv2d(x, W):
-        return tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='SAME')
+        return tf.nn.conv2d(input=x, filters=W, strides=[
+                            1, 1, 1, 1], padding='SAME')
 
     # 池化运算，将卷积特征缩小为1/2
     def max_pool_2x2(x):
-        return tf.nn.max_pool(x, ksize=[1, 2, 2, 1], strides=[
-                              1, 2, 2, 1], padding='SAME')
+        return tf.nn.max_pool2d(input=x, ksize=[1, 2, 2, 1], strides=[
+            1, 2, 2, 1], padding='SAME')
 
     # 给x，y留出占位符，以便未来填充数据
-    x = tf.placeholder("float", [None, 256])
-    y_ = tf.placeholder("float", [None, 10])
+    x = tf.compat.v1.placeholder("float", [None, 256])
+    y_ = tf.compat.v1.placeholder("float", [None, 10])
 
     # 第一个卷积层，5x5的卷积核，输出向量是32维
     w_conv1 = weight_variable([5, 5, 1, 32])
@@ -86,21 +92,27 @@ for file_num in range(10):
     # h_fc1是提取出的256维特征，很关键。后面就是用这个输入到SVM中
 
     # 设置dropout，否则很容易过拟合
-    keep_prob = tf.placeholder("float")
-    h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)
+    keep_prob = tf.compat.v1.placeholder("float")
+    h_fc1_drop = tf.nn.dropout(h_fc1, 1 - (keep_prob))
 
     # 输出层，在本实验中只利用它的输出反向训练CNN，至于其具体数值我不关心
     w_fc2 = weight_variable([256, 10])
     b_fc2 = bias_variable([10])
 
     y_conv = tf.nn.softmax(tf.matmul(h_fc1_drop, w_fc2) + b_fc2)
-    cross_entropy = -tf.reduce_sum(y_ * tf.log(y_conv))
+    cross_entropy = -tf.reduce_sum(input_tensor=y_ * tf.math.log(y_conv))
     # 设置误差代价以交叉熵的形式
-    train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
+    train_step = tf.compat.v1.train.AdamOptimizer(1e-4).minimize(cross_entropy)
     # 用adma的优化算法优化目标函数
-    correct_prediction = tf.equal(tf.argmax(y_conv, 1), tf.argmax(y_, 1))
-    accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
-    sess.run(tf.global_variables_initializer())
+    correct_prediction = tf.equal(
+        tf.argmax(
+            input=y_conv, axis=1), tf.argmax(
+            input=y_, axis=1))
+    accuracy = tf.reduce_mean(
+        input_tensor=tf.cast(
+            correct_prediction,
+            "float"))
+    sess.run(tf.compat.v1.global_variables_initializer())
     for i in range(1000):
         # 进行1000轮迭代，每次随机从训练样本中抽出50个进行训练
         batch = ([], [])
